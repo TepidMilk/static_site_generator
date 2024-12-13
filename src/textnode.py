@@ -20,11 +20,17 @@ class TextNode():
         self.text_type = text_type
         self.url = url
 
-    #Returns true if all properties equal another TextNodes
+    #Checks 2 nodes for equivalence and returns true if no differences
     def __eq__(self, node2):
-        if (self.text, self.text_type, self.url) == (node2.text, node2.text_type, node2.url):
-            return True
+        if self.text != node2.text:
+            raise Exception(f"{self.text} does not equal {node2.text}")
+        elif self.text_type != node2.text_type:
+            raise Exception(f"{self.text_type} does not equal {node2.text_type}")
+        elif self.url != node2.url:
+            raise Exception(f"{self.url} does not equal {node2.url}")
+        return True
         
+      
     #String representation of TextNode
     def __repr__(self):
         return (f"TextNode({self.text}, {self.text_type.value}, {self.url})")
