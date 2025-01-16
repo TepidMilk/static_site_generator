@@ -26,7 +26,7 @@ class HTMLNode():
 class LeafNode(HTMLNode):
     #doesn't allow for children argument
     def __init__(self, value, tag=None, props=None):
-        super().__init__(value, tag, None, props)
+        super().__init__(tag, value, None, props)
 
     def to_html(self):
         if self.value == None:
