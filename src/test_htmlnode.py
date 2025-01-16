@@ -1,20 +1,29 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import *
 
-run_cases = [{"href": "https://www.google.com", "target": "_blank",}, {"HREF": "HTTPS://WWW.GOOGLE.COM", "TARGET": "_BLANK",}, {" ":"", " ":"",}, {"": " ", " ": " "}]
 
 class TestHTMLNode(unittest.TestCase):
-    """creates an HTMLNode and checks """
+    #creates an HTMLNode and some tests. Checks if string created by prop_to_html equals another case strings
     def test_prop_to_html(self):
+        actual = [{"href": "https://www.google.com", "target": "_blank",}, {"HREF": "HTTPS://WWW.GOOGLE.COM", "TARGET": "_BLANK",}, {" ":" ", " ":" ",}]
+        expected = [' href="https://www.google.com" target="_blank"', ' HREF="HTTPS://WWW.GOOGLE.COM" TARGET="_BLANK"', '  =" "']
         try:
-            for run in run_cases:
-                html = HTMLNode(props=run)
-                case_string = ""
-                for key in run:
-                    case_string += f' {key}="{run[key]}"'
-                self.assertEqual(html.prop_to_html(), case_string)
+            for i in range(len(actual)):
+                html = HTMLNode(props=actual[i])
+                self.assertEqual(html.prop_to_html(), expected[i])
                 
+        except Exception as e:
+            print(e)
+    
+
+    def test_leaf_Node(self):
+        actual = [LeafNode("p", "This is a paragraph of text."), LeafNode("a", "Click me!", {"href": "https://www.google.com"})]
+        expected = ['<p>This is a paragraph of text.</p>', '<a href="https://www.google.com">Click me!</a>']
+        try:
+            for i in range(len(actual)):
+                leaf = actual[i]
+                self.assertEqual(leaf.to_html(), expected[i])
         except Exception as e:
             print(e)
 
