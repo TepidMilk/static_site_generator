@@ -1,9 +1,9 @@
 import unittest
 
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import *
 from textnode import TextNode, TextType
 
-class TestSplitNodesDelimiter(unittest.TestCase):
+class TestInlineMarkdown(unittest.TestCase):
     def test_bold_text(self):
         node = TextNode("This text is **Bold**", TextType.NORMAL)
         new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
@@ -59,6 +59,22 @@ class TestSplitNodesDelimiter(unittest.TestCase):
                 TextNode(" and ", TextType.NORMAL),
                 TextNode("code", TextType.CODE)
             ])
+        
+    def test_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        test = extract_markdown_images(text)
+        self.assertEqual(test, [
+            ("rick roll","https://i.imgur.com/aKaOqIh.gif"),
+            ("obi wan","https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+
+    def test_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        test = extract_markdown_links(text)
+        self.assertEqual(test, [
+            ("to boot dev", "https://www.boot.dev"),
+            ("to youtube", "https://www.youtube.com/@bootdotdev")
+        ])
         
 if __name__ == "__main__":
     unittest.main()
