@@ -63,7 +63,8 @@ class TestInlineMarkdown(unittest.TestCase):
     def test_markdown_images(self):
         text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
         test = extract_markdown_images(text)
-        self.assertEqual(test, [
+        self.assertListEqual(test, 
+        [
             ("rick roll","https://i.imgur.com/aKaOqIh.gif"),
             ("obi wan","https://i.imgur.com/fJRm4Vk.jpeg")
         ])
@@ -71,10 +72,59 @@ class TestInlineMarkdown(unittest.TestCase):
     def test_markdown_links(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         test = extract_markdown_links(text)
-        self.assertEqual(test, [
+        self.assertListEqual(test, 
+        [
             ("to boot dev", "https://www.boot.dev"),
             ("to youtube", "https://www.youtube.com/@bootdotdev")
         ])
-        
+
+    def test_split_node_images(self):
+        node = TextNode(
+            "This is text with a image ![to boot dev](https://www.boot.dev) and ![to youtube](https://www.youtube.com/@bootdotdev)",
+            TextType.NORMAL,
+        )
+        test = split_nodes_images([node])
+        self.assertListEqual(test,
+        [
+            TextNode("This is text with a image ", TextType.NORMAL),
+            TextNode("to boot dev", TextType.IMAGES, "https://www.boot.dev"),
+            TextNode(" and ", TextType.NORMAL),
+            TextNode("to youtube", TextType.IMAGES, "https://www.youtube.com/@bootdotdev"),
+        ])
+
+    def test_split_node_links(self):
+        node = TextNode(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+            TextType.NORMAL,
+        )
+        test = split_nodes_links([node])
+        self.assertListEqual(test,
+        [
+            TextNode("This is text with a link ", TextType.NORMAL),
+            TextNode("to boot dev", TextType.LINKS, "https://www.boot.dev"),
+            TextNode(" and ", TextType.NORMAL),
+            TextNode("to youtube", TextType.LINKS, "https://www.youtube.com/@bootdotdev"),
+        ])
+
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        test = text_to_textnodes(text)
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.NORMAL),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.NORMAL),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.NORMAL),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.NORMAL),
+                TextNode("obi wan image", TextType.IMAGES, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.NORMAL),
+                TextNode("link", TextType.LINKS, "https://boot.dev"),
+            ],
+            test
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
