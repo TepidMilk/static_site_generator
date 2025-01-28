@@ -96,12 +96,41 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
         test = block_to_block_type(block)
         self.assertEqual(test, "quote")
 
+    def test_block_type_quote_multiline(self):
+        block = ">This is a quote\n> This is another quote\n> This is the final quote"
+        test = block_to_block_type(block)
+        self.assertEqual(test, "quote")
+
     def test_block_type_unordered_list(self):
-        block = "- this is an unordered list item - second item"
+        block = "- this is an unordered list item"
+        test = block_to_block_type(block)
+        self.assertEqual(test, "unordered_list")
+
+    def test_block_type_unordered_list_multiline(self):
+        block = "- this is an unordered list item\n- This is another item"
         test = block_to_block_type(block)
         self.assertEqual(test, "unordered_list")
 
     def test_block_type_ordered_list(self):
-        block = "1. This is an ordered list2. second item 3. third item"
+        block = "1. This is an ordered list"
         test = block_to_block_type(block)
         self.assertEqual(test, "ordered_list")
+
+    def test_block_type_ordered_list_muiltiline(self):
+        block = "1. This is an ordered list\n2. second item\n3. third item"
+        test = block_to_block_type(block)
+        self.assertEqual(test, "ordered_list")
+
+    def test_md_block_to_block_type(self):
+        markdown = """
+# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item
+"""
+        blocks = markdown_to_blocks(markdown)
+        test = block_to_block_type(blocks[0])
+        self.assertEqual(test, "heading")
