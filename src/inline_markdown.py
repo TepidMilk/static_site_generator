@@ -1,7 +1,7 @@
 import re
 from textnode import TextNode, TextType
 
-#Takes a list of TextNodes in markdown and converts them to a list of TextNodes with appropriate text typing.
+#Takes a list of TextNodes in markdown.
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     results = []
     for node in old_nodes:
@@ -29,6 +29,7 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     matches = re.findall(r"\[(.*?)\]\((http|ftp|https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])\)", text)
     return matches
+
 
 def split_nodes_images(old_nodes):
     results = []
