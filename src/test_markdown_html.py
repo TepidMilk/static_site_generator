@@ -51,15 +51,12 @@ class TestMarkdownHtml(unittest.TestCase):
         self.assertEqual(test, ParentNode("div", [ParentNode("code", [LeafNode(None, "This is some code")])]))
 
     def test_markdown_to_html_node_code(self):
-        text = """
-``` This is some code
-it has two lines and **bold text**```
-"""
+        text = "```This is some code\nit has two lines and **bold text**```"
         test = markdown_to_html_node(text)
         self.assertEqual(test.tag, "div")
         self.assertEqual(test.children[0].tag, "pre")
         self.assertEqual(test.children[0].children[0].tag, "code")
-        self.assertEqual(test.children[0].children[0].children, [LeafNode(None, " This is some code\nit has two lines and "), LeafNode("b", "bold text")])
+        self.assertEqual(test.children[0].children[0].children, [LeafNode(None, "This is some code\nit has two lines and "), LeafNode("b", "bold text")])
 
     def test_markdown_to_html_node_ul(self):
         text = "- This is a list item"
