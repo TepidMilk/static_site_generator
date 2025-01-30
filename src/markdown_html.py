@@ -45,3 +45,9 @@ def text_to_children(text):
     for node in node_list:
         results.append(text_node_to_html_node(node))
     return results
+
+def extract_title(markdown):
+    header = markdown_to_blocks(markdown)[0]
+    if not header.startswith("# "):
+        raise Exception
+    return header.lstrip("# ")
