@@ -28,8 +28,8 @@ class HTMLNode():
 #handles HTMLNodes with no children
 class LeafNode(HTMLNode):
     #doesn't allow for children argument
-    def __init__(self, value, tag=None, props=None):
-        super().__init__(value, tag, None, props)
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
 
     def to_html(self):
         if self.value == None:
@@ -62,3 +62,12 @@ class ParentNode(HTMLNode):
         for child in self.children:
             result += child.to_html()
         return f"<{self.tag}>{result}</{self.tag}>"
+    
+    def __eq__(self, node2):
+        if self.value != node2.value:
+            raise Exception(f"{self.value} does not equal {node2.value}")
+        elif self.tag != node2.tag:
+            raise Exception(f"{self.tag} does not equal {node2.tag}")
+        elif self.props != node2.props:
+            raise Exception(f"{self.props} does not equal {node2.props}")
+        return True
