@@ -1,6 +1,7 @@
 import os
 import shutil
 
+#This function recursively copies files from source dir to destination dir
 def copy_dir_to(source, destination):
     if not os.path.exists(source):
         raise Exception
