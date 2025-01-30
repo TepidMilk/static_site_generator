@@ -22,12 +22,12 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 #extracts a tuple of the alt text and image link
 def extract_markdown_images(text):
-    matches = re.findall(r"!\[(.*?)\]\((http|ftp|https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])\)", text)
+    matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return matches
 
 #extracts a tuple of the anchor text and link
 def extract_markdown_links(text):
-    matches = re.findall(r"\[(.*?)\]\((http|ftp|https:\/\/[\w_-]+(?:(?:\.[\w_-]+)+)[\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])\)", text)
+    matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return matches
 
 
@@ -38,7 +38,7 @@ def split_nodes_images(old_nodes):
             results.append(node)
             continue
         split_nodes = []
-        split_text = re.split(r'(?=!\[)|(?<=[\)])', node.text)
+        split_text = re.split(r'(!\[(?:[^\[\]]*)\]\((?:[^\(\)]*)\))', node.text)
         for i in range(len(split_text)):
             if split_text[i] == "":
                 continue
@@ -57,7 +57,7 @@ def split_nodes_links(old_nodes):
             results.append(node)
             continue
         split_nodes = []
-        split_text = re.split(r'(?=[\[])|(?<=[\)])', node.text)
+        split_text = re.split(r'((?<!!)\[(?:[^\[\]]*)\]\((?:[^\(\)]*)\))', node.text)
         if len(split_text) % 2 == 0:
             raise ValueError("Invalid markdown, formatted section not closed")
         for i in range(len(split_text)):
