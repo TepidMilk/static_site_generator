@@ -64,10 +64,7 @@ class TestMarkdownHtml(unittest.TestCase):
         self.assertEqual(test, ParentNode("div", [ParentNode("ul", [ParentNode("li", [LeafNode(None, "This is a list item")])])]))
 
     def test_markdown_to_html_node_ul_multi(self):
-        text = """
-- list item 1
-- list item 2
-"""
+        text = "- list item 1\n- list item 2"""
         test = markdown_to_html_node(text)
         self.assertEqual(test.tag, "div")
         self.assertEqual(test.children[0].tag, "ul")
@@ -82,10 +79,7 @@ class TestMarkdownHtml(unittest.TestCase):
         self.assertEqual(test, ParentNode("div", [ParentNode("ol", [ParentNode("li", [LeafNode(None, "This is a list item")])])]))
 
     def test_markdown_to_html_node_ol_multi(self):
-        text = """
-1. list item 1
-2. list item 2
-"""
+        text = "1. list item 1\n2. list item 2"
         test = markdown_to_html_node(text)
         self.assertEqual(test.tag, "div")
         self.assertEqual(test.children[0].tag, "ol")
