@@ -88,7 +88,15 @@ class TestMarkdownHtml(unittest.TestCase):
         self.assertEqual(test.children[0].children[0].children, [LeafNode(None, "list item 1")])
         self.assertEqual(test.children[0].children[1].children, [LeafNode(None, "list item 2")])
 
-    
+    def test_extract_title(self):
+        text = "# Hello"
+        test = extract_title(text)
+        self.assertEqual(test, "Hello")
+
+    def test_extract_title_multiline(self):
+        text = "# Tolkien Fan Club\n\n**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)\n\n> All that is gold does not glitter"
+        test = extract_title(text)
+        self.assertEqual(test, "Tolkien Fan Club")
 
 
 if __name__ == "__main__":
