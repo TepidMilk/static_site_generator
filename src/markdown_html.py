@@ -10,31 +10,31 @@ def markdown_to_html_node(markdown):
     for block in blocks:
         block_type = block_to_block_type(block)
         if block_type == "paragraph":
-            node = HTMLNode("p", None, text_to_children(block))
+            node = ParentNode("p", text_to_children(block))
         elif block_type == "heading":
             header = block.lstrip("# ")
             i = (len(block) - len(block.lstrip("#")))
-            node = HTMLNode(f"h{i}", text_to_children(header))
+            node = ParentNode(f"h{i}", text_to_children(header))
         elif block_type == "quote":
             quote = block.lstrip("> ")
-            node = HTMLNode("blockquote", None, text_to_children(quote))
+            node = ParentNode("blockquote", text_to_children(quote))
         elif block_type == "code":
             code = block[3:-3]
-            node = HTMLNode("pre", None, [HTMLNode("code", None, text_to_children(code))])
+            node = ParentNode("pre", [ParentNode("code", text_to_children(code))])
         elif block_type == "unordered_list":
             list_nodes = []
             lines = block.split("\n")
             for line in lines:
                 sub = re.sub(r"-\s|\*\s", "", line)
-                list_nodes.append(HTMLNode("li", None, text_to_children(sub)))
-            node = HTMLNode("ul", None, list_nodes)
+                list_nodes.append(ParentNode("li", text_to_children(sub)))
+            node = ParentNode("ul", list_nodes)
         elif block_type == "ordered_list":
             list_nodes = []
             lines = block.split("\n")
             for line in lines:
                 sub = re.sub(r"\d\.\s", "", line)
-                list_nodes.append(HTMLNode("li", None, text_to_children(sub)))
-            node = HTMLNode("ol", None, list_nodes)
+                list_nodes.append(ParentNode("li", text_to_children(sub)))
+            node = ParentNode("ol", list_nodes)
         child_nodes.append(node)
     div_node = ParentNode("div", child_nodes)
     return div_node
