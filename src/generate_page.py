@@ -14,12 +14,19 @@ def copy_dir_to(source, destination):
     for file in os.listdir(source):
         log = copy_dir_to(os.path.join(source, file), os.path.join(destination, file))
 
-"""Generates a webpage. 
-Takes contents from from_path and inserts them into template_path.
-Then writes it to dest_path to be generated."""
+# turns markdown(from_path) into html(template_path) and writes it at dest_path
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    with open(from_path, "r") as f:
-        content = f.read()
-    
-    print(content)
+    with open(from_path, "r") as markdown:
+        content = markdown.read()
+    with open(template_path, "r") as temp:
+        template = temp.read()
+    html = markdown_to_html_node(content).to_html()
+    title = extract_title(content)
+    template = template.replace("{{ Title }}", title)
+    template = template.replace("{{ Content }}", html)
+    dest_dir_path = os.path.dirname(dest_path)
+    if dest_dir_path != "":
+        os.makedirs(dest_dir_path, exist_ok=True)
+    with open(dest_path, "w") as to_file:
+        to_file.write(template)
